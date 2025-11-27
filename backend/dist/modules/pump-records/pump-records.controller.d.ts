@@ -9,7 +9,7 @@ export declare class PumpRecordsController {
         userId: any;
     }>;
     findAll(query: string, current: string, pageSize: string): Promise<{
-        results: (import("mongoose").Document<unknown, {}, import("./schemas/pump-record.schema").PumpRecord> & import("./schemas/pump-record.schema").PumpRecord & {
+        results: (import("mongoose").Document<unknown, {}, import("./schemas/pump-record.schema").PumpRecord, {}, {}> & import("./schemas/pump-record.schema").PumpRecord & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -19,7 +19,7 @@ export declare class PumpRecordsController {
         current: number;
         pageSize: number;
     }>;
-    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/pump-record.schema").PumpRecord> & import("./schemas/pump-record.schema").PumpRecord & {
+    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/pump-record.schema").PumpRecord, {}, {}> & import("./schemas/pump-record.schema").PumpRecord & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

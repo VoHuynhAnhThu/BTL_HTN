@@ -50,6 +50,20 @@ let AuthController = class AuthController {
     getProfile(req) {
         return req.user;
     }
+    async verify(verifyDto) {
+        if (verifyDto.email) {
+            return await this.authService.verify(verifyDto.email, verifyDto.codeId, true);
+        }
+        else if (verifyDto._id) {
+            return await this.authService.verify(verifyDto._id, verifyDto.codeId, false);
+        }
+        else {
+            throw new common_1.UnauthorizedException('Either email or _id is required');
+        }
+    }
+    async devReset(body) {
+        return await this.authService.devResetPassword(body.email, body.newPassword);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -85,6 +99,23 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getProfile", null);
+__decorate([
+    (0, customize_1.Public)(),
+    (0, common_1.Post)('verify'),
+    (0, customize_1.ResponseMessage)("Verify account successfully"),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_auth_dto_1.VerifyAuthDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verify", null);
+__decorate([
+    (0, common_1.Post)('reset-temp'),
+    (0, customize_1.Public)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "devReset", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

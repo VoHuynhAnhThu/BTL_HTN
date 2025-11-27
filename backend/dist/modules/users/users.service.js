@@ -167,6 +167,24 @@ let UsersService = class UsersService {
             _id: user._id,
         };
     }
+    async activateUser(_id) {
+        const user = await this.userModel.findById(_id).exec();
+        if (!user) {
+            throw new Error('User not found');
+        }
+        user.isActive = !user.isActive;
+        return user.save();
+    }
+    async devResetPasswordByEmail(email, newPlainPassword) {
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new common_1.BadRequestException(`User not found: ${email}`);
+        }
+        user.password = await (0, util_1.hashPasswordHelper)(newPlainPassword);
+        user.isActive = true;
+        await user.save();
+        return { _id: user._id, email: user.email, isActive: user.isActive };
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

@@ -145,4 +145,16 @@ export class UsersService {
     // Save the updated user
     return user.save();
   }
+
+  // DEV ONLY: reset password directly by email (activate if inactive)
+  async devResetPasswordByEmail(email: string, newPlainPassword: string) {
+    const user: any = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new BadRequestException(`User not found: ${email}`);
+    }
+    user.password = await hashPasswordHelper(newPlainPassword);
+    user.isActive = true; // ensure active
+    await user.save();
+    return { _id: user._id, email: user.email, isActive: user.isActive };
+  }
 }

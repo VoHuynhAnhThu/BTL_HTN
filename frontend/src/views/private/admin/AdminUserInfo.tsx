@@ -20,13 +20,13 @@ const AdminUserInfo: React.FC<AdminUserInfoProps> = ({user, userInfoList, setUse
     const [aioUsername, setAioUsername] = useState<string>("");
     const [pumpFeed, setPumpFeed] = useState<string>("");
     const [temperatureFeed, setTemperatureFeed] = useState<string>("");
-    const [moistureFeed, setMoistureFeed] = useState<string>("");
-    const [humidityFeed, setHumidityFeed] = useState<string>("");
+    const [humidityFeed, sethumidityFeed] = useState<string>("");
+    const [lightFeed, setlightFeed] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const handleSubmitMQTT = (userId: string) => {
 
-        if (!aioKey || !aioUsername || !pumpFeed || !temperatureFeed || !moistureFeed || !humidityFeed) {
+        if (!aioKey || !aioUsername || !pumpFeed || !temperatureFeed || !humidityFeed || !lightFeed) {
             pushWarning({ message: "Please fill all fields", title: "Warning" });
             return;
         }
@@ -40,8 +40,8 @@ const AdminUserInfo: React.FC<AdminUserInfoProps> = ({user, userInfoList, setUse
             aioUsername,
             pumpFeed,
             temperatureFeed,
-            moistureFeed,
-            humidityFeed
+            humidityFeed,
+            lightFeed
         }).then((res) => {
             setIsSubmitting(false);
             pushSuccess({ message: "MQTT configuration created successfully", title: "Success" });
@@ -54,8 +54,8 @@ const AdminUserInfo: React.FC<AdminUserInfoProps> = ({user, userInfoList, setUse
         setAioUsername("");
         setPumpFeed("");
         setTemperatureFeed("");
-        setMoistureFeed("");
-        setHumidityFeed("");
+        sethumidityFeed("");
+        setlightFeed("");
     }
 
     const deleteUser = (userId: string) => {
@@ -120,11 +120,11 @@ const AdminUserInfo: React.FC<AdminUserInfoProps> = ({user, userInfoList, setUse
                 <PenLine size={16} className="text-primary-500 mr-3" />
             </Input>
             <Input>
-                <InputField placeholder="Moisture Feed" value={moistureFeed} onChangeText={setMoistureFeed}></InputField>
+                <InputField placeholder="humidity Feed" value={humidityFeed} onChangeText={sethumidityFeed}></InputField>
                 <PenLine size={16} className="text-primary-500 mr-3" />
             </Input>
             <Input>
-                <InputField placeholder="Humidity Feed" value={humidityFeed} onChangeText={setHumidityFeed}></InputField>
+                <InputField placeholder="light Feed" value={lightFeed} onChangeText={setlightFeed}></InputField>
                 <PenLine size={16} className="text-primary-500 mr-3" />
             </Input>
             <HStack>

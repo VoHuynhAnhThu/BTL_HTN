@@ -9,7 +9,7 @@ export declare class GardenInfoController {
         userId: string;
     }>;
     findAll(query: string, current: string, pageSize: string): Promise<{
-        gardenInfos: (import("mongoose").Document<unknown, {}, import("./schemas/garden-info.schema").GardenInfo> & import("./schemas/garden-info.schema").GardenInfo & {
+        gardenInfos: (import("mongoose").Document<unknown, {}, import("./schemas/garden-info.schema").GardenInfo, {}, {}> & import("./schemas/garden-info.schema").GardenInfo & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -19,7 +19,7 @@ export declare class GardenInfoController {
         current: number;
         pageSize: number;
     }>;
-    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/garden-info.schema").GardenInfo> & import("./schemas/garden-info.schema").GardenInfo & {
+    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/garden-info.schema").GardenInfo, {}, {}> & import("./schemas/garden-info.schema").GardenInfo & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

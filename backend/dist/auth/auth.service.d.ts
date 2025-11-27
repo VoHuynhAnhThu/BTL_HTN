@@ -18,4 +18,10 @@ export declare class AuthService {
     register(resgisterDto: CreateAuthDto): Promise<{
         _id: any;
     }>;
+    verify(identifier: string, codeId: string, isEmail?: boolean): Promise<any>;
+    devResetPassword(email: string, newPassword: string): Promise<{
+        _id: any;
+        email: any;
+        isActive: any;
+    }>;
 }

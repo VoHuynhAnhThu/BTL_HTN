@@ -25,4 +25,10 @@ export declare class UsersService {
     handleRegister(registerDto: CreateUserDto): Promise<{
         _id: any;
     }>;
+    activateUser(_id: string): Promise<any>;
+    devResetPasswordByEmail(email: string, newPlainPassword: string): Promise<{
+        _id: any;
+        email: any;
+        isActive: any;
+    }>;
 }

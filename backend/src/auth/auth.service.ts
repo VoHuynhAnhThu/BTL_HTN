@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
 import { UserDocument } from 'src/modules/users/schemas/user.schema';
 
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,12 +30,17 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user:any = await this.userService.findOneByEmail(username);
-    if (!user)
-      return null
+    if (!user) {
+      console.log(`[AUTH] validateUser: user not found for email=${username}`);
+      return null;
+    }
     const isValidPassword = await comparePasswordHelper(pass, user.password);
+    console.log(`[AUTH] validateUser: email=${username} matchPassword=${isValidPassword}`);
     if (!isValidPassword) {
       return null;
     }
+    console.log("username=", username);
+    console.log("user from DB=", user);
 
     return user;
   }
@@ -57,9 +63,15 @@ export class AuthService {
     return await this.userService.handleRegister(resgisterDto)
   }
 
-  async verify(_id: string, codeId: string){
-    // find user by _id
-    const user : any = await this.userService.findOneById(_id) as UserDocument | null;
+  async verify(identifier: string, codeId: string, isEmail: boolean = false){
+    // find user by _id or email
+    let user : any;
+    if (isEmail) {
+      user = await this.userService.findOneByEmail(identifier);
+    } else {
+      user = await this.userService.findOneById(identifier) as UserDocument | null;
+    }
+    
     if (!user) {
       throw new UnauthorizedException('Invalid user');
     }
@@ -74,6 +86,11 @@ export class AuthService {
     }
 
     // trigger isActive to true
-    return this.userService.activateUser(_id)
+    return this.userService.activateUser(user._id)
+  }
+
+  // DEV ONLY: reset password directly (email + newPassword)
+  async devResetPassword(email: string, newPassword: string) {
+    return await this.userService.devResetPasswordByEmail(email, newPassword);
   }
 }

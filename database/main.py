@@ -1,11 +1,11 @@
 from pymongo import MongoClient
 from User import User
 from TemperatureRecord import TemperatureRecord
+from LightRecord import LightRecord
 from HumidityRecord import HumidityRecord
-from MoistureRecord import MoistureRecord
 from PumpRecord import PumpRecord
 
-uri = "mongodb://localhost:27017" #! CHANGE THIS TO YOUR MONGODB URI
+uri = "mongodb+srv://thuvohuynhanh_db_user:KRblevec92zHV2UU@cluster0.04ep0nw.mongodb.net/?appName=Cluster0" #! CHANGE THIS TO YOUR MONGODB URI
 
 def main():
     client = MongoClient(uri)
@@ -22,15 +22,6 @@ def main():
     ]
     temperature_record_collection.insert_many([record.__dict__ for record in temperature_records])
     
-    moisture_record_collection = db.moisture_records
-    moisture_records = [
-        MoistureRecord(result.inserted_id, 5),
-        MoistureRecord(result.inserted_id, 6),
-        MoistureRecord(result.inserted_id, 7),
-        MoistureRecord(result.inserted_id, 8),
-    ]
-    moisture_record_collection.insert_many([record.__dict__ for record in moisture_records])
-    
     humidity_record_collection = db.humidity_records
     humidity_records = [
         HumidityRecord(result.inserted_id, 5),
@@ -39,6 +30,15 @@ def main():
         HumidityRecord(result.inserted_id, 8),
     ]
     humidity_record_collection.insert_many([record.__dict__ for record in humidity_records])
+    
+    light_record_collection = db.light_records
+    light_records = [
+        LightRecord(result.inserted_id, 5),
+        LightRecord(result.inserted_id, 6),
+        LightRecord(result.inserted_id, 7),
+        LightRecord(result.inserted_id, 8),
+    ]
+    light_record_collection.insert_many([record.__dict__ for record in light_records])
 
     pump_record_collection = db.pump_records
     pump_records = [

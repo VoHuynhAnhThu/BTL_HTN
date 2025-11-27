@@ -32,6 +32,8 @@ export default function Layout() {
             <Tabs.Screen name="menu" options={{ title: 'Menu', headerTitle: "Menu", tabBarIcon: ({ color }) => <Menu size={24} color={color} />, headerRight: () => null }} />
             <Tabs.Screen name="info" options={{ title: 'User info', headerTitle: "My account", href: null, headerRight: () => null }} />
             <Tabs.Screen name="password-change" options={{ title: 'Password changes', headerTitle: "", href: null, headerRight: () => null}} />
+            <Tabs.Screen name="leaf-scan" options={{ title: 'Leaf Scan', headerTitle: "AI Disease Detection", href: null, headerRight: () => null }} />
+            <Tabs.Screen name="device-setup" options={{ title: 'Device Setup', headerTitle: "Device Setup", href: null, headerRight: () => null }} />
         </Tabs>
     )
 }

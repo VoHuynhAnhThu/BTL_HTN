@@ -1,8 +1,71 @@
 import { AxiosInstance } from "axios";
+import { Platform } from 'react-native';
 import { axiosInstance, getFromStorage, processError, processResponse, saveToStorage } from "./utils";
 
-export const API_URL = "https://smartdrip-979829148615.asia-southeast2.run.app/api/v1"
+// Prefer environment override (Expo: EXPO_PUBLIC_BACKEND_URL)
+// Prefer env override; if none and running on localhost use local backend port 8080
+const backendOverride = process.env.EXPO_PUBLIC_BACKEND_URL;
+const inferredLocal = (typeof window !== 'undefined' && window.location.hostname === 'localhost') ? 'http://localhost:8080' : undefined;
+// Backend already has global prefix /api/v1, so we don't add it here
+export const API_URL = (backendOverride && backendOverride.trim().length > 0 ? backendOverride : inferredLocal || "https://smartdrip-979829148615.asia-southeast2.run.app") + "/api/v1";
 export const AI_URL = "http://localhost:8000"
+
+// Backend root (remove trailing /api/v1 if present) to reach public AI proxy endpoints
+export const BACKEND_ROOT = API_URL.replace(/\/api\/v1$/, "");
+
+export class AiInferenceService {
+    private baseURL: string;
+    private axios: AxiosInstance;
+
+    constructor() {
+        // Backend controllers are behind global prefix /api/v1, so use API_URL
+        this.baseURL = API_URL + "/ai"; // /api/v1/ai/image & /api/v1/ai/inference
+        this.axios = axiosInstance;
+    }
+
+    public async status(): Promise<CustomResponse<any>> {
+        try {
+            const response = await this.axios.get(`${this.baseURL}/inference`);
+            return processResponse<any>(response);
+        } catch (error) {
+            return processError(error);
+        }
+    }
+
+    public async inferImage(fileUri: string, fileName?: string): Promise<CustomResponse<any>> {
+        try {
+            const form = new FormData();
+            const name = fileName || 'leaf.jpg';
+            if (Platform.OS === 'web') {
+                // fetch blob from uri (may be data: or blob:)
+                const fetchRes = await fetch(fileUri);
+                const blob = await fetchRes.blob();
+                const file = new File([blob], name, { type: blob.type || 'image/jpeg' });
+                form.append('file', file);
+            } else {
+                // React Native requires specific format for file upload
+                form.append('file', {
+                    uri: fileUri,
+                    name,
+                    type: 'image/jpeg'
+                } as any);
+            }
+            
+            // React Native needs explicit Content-Type header for multipart/form-data
+            const headers = Platform.OS === 'web' 
+                ? {} 
+                : { 'Content-Type': 'multipart/form-data' };
+            
+            const response = await this.axios.post(`${this.baseURL}/image`, form, { 
+                maxBodyLength: Infinity,
+                headers
+            });
+            return processResponse<any>(response);
+        } catch (error) {
+            return processError(error);
+        }
+    }
+}
 
 export class UserService {
     private baseURL: string;
@@ -85,9 +148,11 @@ export class AuthService {
             const processRes = processResponse<LoginResponseData>(response);
             if (processRes.success) {
                 const token = processRes.data.access_token;
-                saveToStorage("accessToken",token);
+                saveToStorage("accessToken", token);
+                // Update axios default header so subsequent requests carry token
+                axiosInstance.defaults.headers.Authorization = `Bearer ${token}`;
                 const id = processRes.data.user._id;
-                saveToStorage("userId",id);
+                saveToStorage("userId", id);
             }
             return processRes;
         } catch (error) {
@@ -217,9 +282,9 @@ export class WeatherRecordService {
         this.axios = axiosInstance;
     }
 
-    public async getAllHumidityRecords(payload: SearchPayload): Promise<CustomResponse<any>> {
+    public async getAlllightRecords(payload: SearchPayload): Promise<CustomResponse<any>> {
         try {
-            const response = await this.axios.get(`${this.baseURL}/humidity-records`, {
+            const response = await this.axios.get(`${this.baseURL}/light-records`, {
                 params: {
                     current: payload.current,
                     pageSize: payload.pageSize,
@@ -231,9 +296,9 @@ export class WeatherRecordService {
         }
     }
 
-    public async getAllMoistureRecords(payload: SearchPayload): Promise<CustomResponse<any>> {
+    public async getAllhumidityRecords(payload: SearchPayload): Promise<CustomResponse<any>> {
         try {
-            const response = await this.axios.get(`${this.baseURL}/moisture-records`, {
+            const response = await this.axios.get(`${this.baseURL}/humidity-records`, {
                 params: {
                     current: payload.current,
                     pageSize: payload.pageSize,

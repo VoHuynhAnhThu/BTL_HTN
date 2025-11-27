@@ -1,7 +1,7 @@
 import ShadowBox from "@/src/components/custom/ShadowBox";
 import { Box, Button, Fab, FabLabel, Heading, HStack, Text, VStack } from "@/src/components/ui";
 import { interopIcons } from "@/src/utils/nativewind";
-import { CalendarDays, CloudSun, Droplet, Leaf, Moon, PenLine, Plus, Sun, Thermometer, Trash } from "lucide-react-native";
+import { CalendarDays, CloudSun, Droplet, Leaf, Moon, PenLine, Plus, Sun, Thermometer, Trash, Sparkles } from "lucide-react-native";
 import { Fragment, useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import PopupAddPlant from "./components/PopupAddPlant";
@@ -12,25 +12,27 @@ import { ButtonIcon } from "@/src/components/ui/button";
 import { useAuth } from "@/src/context/auth";
 import { getFromStorage } from "@/src/lib/utils";
 import axios from "axios";
+import { useRouter } from "expo-router";
 
 interopIcons([CloudSun, Sun, Moon, Thermometer, Droplet, Leaf, Plus, PenLine]);
 
 type DataType = {
     temperature: number,
+    light: number,
     humidity: number,
-    moisture: number,
     isOn: boolean,
 }
 
 export default function UserDashboard() {
+    const router = useRouter();
     const { pushError, pushSuccess, pushAlertDialog } = useUtility();
 
     const [counterRefresh, setCounterRefresh] = useState(0);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
     const [bla, setDate] = useState<DataType>({
         temperature: 0,
+        light: 0,
         humidity: 0,
-        moisture: 0,
         isOn: false,
     })
 
@@ -101,18 +103,18 @@ export default function UserDashboard() {
     }
 
     const [apiData, setAPIData] = useState<any>({
+        light: 1,
         humidity: 1,
-        moisture: 1,
         temperature: 1,
     });
 
     const data = {
         farmName: "Smart drip farm",
         temperature: apiData.temperature,
-        light: 123,
+        // light: 123,
         thermometer: 32,
+        light: apiData.light,
         humidity: apiData.humidity,
-        soilMoisture: apiData.moisture,
         sunrise: "06:30 AM",
         sunset: "07:30 PM",
     }
@@ -160,19 +162,19 @@ export default function UserDashboard() {
                             <HStack className="gap-4">
                             <ShadowBox className="h-fit">
                                     <HStack className="flex-1 justify-start items-center p-4 gap-4">
-                                        <Droplet className="text-primary-500" />
+                                        <Sun className="text-primary-500" />
                                         <VStack>
-                                            <Text className="font-semibold text-2xs">Humidity</Text>
-                                            <Text>{`${bla.humidity} \%`}</Text>
+                                            <Text className="font-semibold text-2xs">Light</Text>
+                                            <Text>{`${bla.light}`}</Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
                                 <ShadowBox className="h-fit">
                                     <HStack className="flex-1 justify-start items-center p-4 gap-4">
-                                        <Leaf className="text-primary-500" />
+                                        <Droplet className="text-primary-500" />
                                         <VStack>
-                                            <Text className="font-semibold text-2xs">Soil moisture</Text>
-                                            <Text>{`${bla.moisture} \%`}</Text>
+                                            <Text className="font-semibold text-2xs">Humidity</Text>
+                                            <Text>{`${bla.humidity} \%`}</Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
@@ -194,6 +196,17 @@ export default function UserDashboard() {
                                 </ShadowBox> */}
                         </VStack>
                     </Box>
+                    {/* AI Scan Button - Full Width */}
+                    <Button 
+                        size="lg" 
+                        className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 rounded-xl h-16"
+                        onPress={() => router.push('/user/leaf-scan')}
+                    >
+                        <HStack className="items-center gap-3">
+                            <Sparkles size={24} className="text-white" />
+                            <Text className="text-white font-bold text-base">AI Disease Detection</Text>
+                        </HStack>
+                    </Button>
 
                     <Box className="w-full h-fit bg-background-0 rounded-xl border border-slate-200 shadow-md shadow-slate-200 p-4">
                         <HStack className="justify-between w-full">

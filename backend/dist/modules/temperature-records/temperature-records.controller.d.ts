@@ -9,7 +9,7 @@ export declare class TemperatureRecordsController {
         userId: any;
     }>;
     findAll(query: string, current: string, pageSize: string): Promise<{
-        results: (import("mongoose").Document<unknown, {}, import("./schemas/temperature-record.entity").TemperatureRecord> & import("./schemas/temperature-record.entity").TemperatureRecord & {
+        results: (import("mongoose").Document<unknown, {}, import("./schemas/temperature-record.entity").TemperatureRecord, {}, {}> & import("./schemas/temperature-record.entity").TemperatureRecord & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -19,7 +19,7 @@ export declare class TemperatureRecordsController {
         current: number;
         pageSize: number;
     }>;
-    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/temperature-record.entity").TemperatureRecord> & import("./schemas/temperature-record.entity").TemperatureRecord & {
+    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/temperature-record.entity").TemperatureRecord, {}, {}> & import("./schemas/temperature-record.entity").TemperatureRecord & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

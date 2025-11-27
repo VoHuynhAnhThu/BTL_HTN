@@ -32,12 +32,17 @@ let AuthService = class AuthService {
     }
     async validateUser(username, pass) {
         const user = await this.userService.findOneByEmail(username);
-        if (!user)
+        if (!user) {
+            console.log(`[AUTH] validateUser: user not found for email=${username}`);
             return null;
+        }
         const isValidPassword = await (0, util_1.comparePasswordHelper)(pass, user.password);
+        console.log(`[AUTH] validateUser: email=${username} matchPassword=${isValidPassword}`);
         if (!isValidPassword) {
             return null;
         }
+        console.log("username=", username);
+        console.log("user from DB=", user);
         return user;
     }
     async login(user) {
@@ -53,6 +58,29 @@ let AuthService = class AuthService {
     }
     async register(resgisterDto) {
         return await this.userService.handleRegister(resgisterDto);
+    }
+    async verify(identifier, codeId, isEmail = false) {
+        let user;
+        if (isEmail) {
+            user = await this.userService.findOneByEmail(identifier);
+        }
+        else {
+            user = await this.userService.findOneById(identifier);
+        }
+        if (!user) {
+            throw new common_1.UnauthorizedException('Invalid user');
+        }
+        console.log(user.codeId);
+        if (user.isActive === true) {
+            throw new common_1.UnauthorizedException('This account is already activated!');
+        }
+        if (user?.codeId !== codeId) {
+            throw new common_1.UnauthorizedException('Invalid codeId');
+        }
+        return this.userService.activateUser(user._id);
+    }
+    async devResetPassword(email, newPassword) {
+        return await this.userService.devResetPasswordByEmail(email, newPassword);
     }
 };
 exports.AuthService = AuthService;

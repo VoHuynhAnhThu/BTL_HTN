@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateAuthDto = void 0;
+exports.VerifyAuthDto = exports.CreateAuthDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateAuthDto {
 }
@@ -39,4 +39,20 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateAuthDto.prototype, "address", void 0);
+class VerifyAuthDto {
+}
+exports.VerifyAuthDto = VerifyAuthDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], VerifyAuthDto.prototype, "_id", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEmail)({}, { message: 'Email is invalid' }),
+    __metadata("design:type", String)
+], VerifyAuthDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'Code is required' }),
+    __metadata("design:type", String)
+], VerifyAuthDto.prototype, "codeId", void 0);
 //# sourceMappingURL=create-auth.dto.js.map

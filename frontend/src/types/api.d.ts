@@ -105,18 +105,18 @@ declare global {
         cropStart?: string;
     }
 
-    // HumidityRecord
-    type HumidityRecordResponse = {
-        results: HumidityRecord[];
+    // lightRecord
+    type lightRecordResponse = {
+        results: lightRecord[];
         totalItems: number;
         totalPages: number;
         current: number;
         pageSize: number;
     }
 
-    type HumidityRecord = {
+    type lightRecord = {
         _id: string;
-        humidity: number;
+        light: number;
     }
     // TemperatureRecord
     type TemperatureRecordResponse = {
@@ -132,18 +132,18 @@ declare global {
         temperature: number;
     }
 
-    // MoistureRecord
-    type MoistureRecordResponse = {
-        results: MoistureRecord[];
+    // humidityRecord
+    type humidityRecordResponse = {
+        results: humidityRecord[];
         totalItems: number;
         totalPages: number;
         current: number;
         pageSize: number;
     }
 
-    type MoistureRecord = {
+    type humidityRecord = {
         _id: string;
-        moisture: number;
+        humidity: number;
     }
 
     // PumpRecord
@@ -167,8 +167,8 @@ declare global {
         aioUsername: string
         pumpFeed: string
         temperatureFeed: string
-        moistureFeed: string
         humidityFeed: string
+        lightFeed: string
     }
 
     type UpdateMQTTTPayload = {
@@ -176,8 +176,8 @@ declare global {
         aioUsername?: string
         pumpFeed?: string
         temperatureFeed?: string
-        moistureFeed?: string
         humidityFeed?: string
+        lightFeed?: string
     }
 
     //Notification

@@ -9,7 +9,7 @@ export declare class HumidityRecordsController {
         userId: any;
     }>;
     findAll(query: string, current: string, pageSize: string): Promise<{
-        results: (import("mongoose").Document<unknown, {}, import("./schemas/humidity-record.schema").HumidityRecord> & import("./schemas/humidity-record.schema").HumidityRecord & {
+        results: (import("mongoose").Document<unknown, {}, import("./schemas/humidity-record.schema").HumidityRecord, {}, {}> & import("./schemas/humidity-record.schema").HumidityRecord & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -19,7 +19,7 @@ export declare class HumidityRecordsController {
         current: number;
         pageSize: number;
     }>;
-    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/humidity-record.schema").HumidityRecord> & import("./schemas/humidity-record.schema").HumidityRecord & {
+    findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/humidity-record.schema").HumidityRecord, {}, {}> & import("./schemas/humidity-record.schema").HumidityRecord & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

@@ -8,7 +8,7 @@ export declare class GardenInfoService {
     private readonly usersService;
     constructor(gardenInfoModel: Model<GardenInfo>, usersService: UsersService);
     IsExistThisUserId(userId: string): Promise<{
-        _id: mongoose.Types.ObjectId;
+        _id: mongoose.mongo.BSON.ObjectId;
     } | null>;
     IsExistThisUser(userId: string): Promise<never>;
     create(createGardenInfoDto: CreateGardenInfoDto): Promise<{
@@ -16,7 +16,7 @@ export declare class GardenInfoService {
         userId: string;
     }>;
     findAll(query: string, current: number, pageSize: number): Promise<{
-        gardenInfos: (mongoose.Document<unknown, {}, GardenInfo> & GardenInfo & {
+        gardenInfos: (mongoose.Document<unknown, {}, GardenInfo, {}, {}> & GardenInfo & {
             _id: mongoose.Types.ObjectId;
         } & {
             __v: number;
@@ -26,7 +26,7 @@ export declare class GardenInfoService {
         current: number;
         pageSize: number;
     }>;
-    findOne(id: string): Promise<(mongoose.Document<unknown, {}, GardenInfo> & GardenInfo & {
+    findOne(id: string): Promise<(mongoose.Document<unknown, {}, GardenInfo, {}, {}> & GardenInfo & {
         _id: mongoose.Types.ObjectId;
     } & {
         __v: number;

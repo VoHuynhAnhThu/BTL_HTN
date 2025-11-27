@@ -6,3 +6,8 @@ export declare class CreateAuthDto {
     phoneNumber: string;
     address: string;
 }
+export declare class VerifyAuthDto {
+    _id?: string;
+    email?: string;
+    codeId: string;
+}

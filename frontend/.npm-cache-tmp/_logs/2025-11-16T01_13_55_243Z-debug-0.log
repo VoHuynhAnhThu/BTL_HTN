@@ -1,0 +1,27 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.2
+2 info using node@v22.15.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:D:\Giao_trinh_dai_hoc\he_thong_nhung\SmartDrip\frontend\.npmrc
+5 silly config load:file:C:\Users\vohuy\.npmrc
+6 silly config load:file:C:\Users\vohuy\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm explain react-native-unimodules
+8 verbose argv "explain" "react-native-unimodules" "--json"
+9 verbose logfile logs-max:10 dir:D:\Giao_trinh_dai_hoc\he_thong_nhung\SmartDrip\frontend\.npm-cache-tmp\_logs\2025-11-16T01_13_55_243Z-
+10 verbose logfile D:\Giao_trinh_dai_hoc\he_thong_nhung\SmartDrip\frontend\.npm-cache-tmp\_logs\2025-11-16T01_13_55_243Z-debug-0.log
+11 silly logfile start cleaning logs, removing 3 files
+12 silly packumentCache heap:2197815296 maxSize:549453824 maxEntrySize:274726912
+13 silly logfile done cleaning log files
+14 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules/react-native-css-interop
+15 verbose stack Error: No dependencies found matching react-native-unimodules
+15 verbose stack     at Explain.exec (C:\Program Files\nodejs\node_modules\npm\lib\commands\explain.js:58:13)
+15 verbose stack     at async Npm.exec (C:\Program Files\nodejs\node_modules\npm\lib\npm.js:207:9)
+15 verbose stack     at async module.exports (C:\Program Files\nodejs\node_modules\npm\lib\cli\entry.js:74:5)
+16 error No dependencies found matching react-native-unimodules
+17 verbose cwd D:\Giao_trinh_dai_hoc\he_thong_nhung\SmartDrip\frontend
+18 verbose os Windows_NT 10.0.26200
+19 verbose node v22.15.0
+20 verbose npm  v10.9.2
+21 verbose exit 1
+22 verbose code 1
+23 error A complete log of this run can be found in: D:\Giao_trinh_dai_hoc\he_thong_nhung\SmartDrip\frontend\.npm-cache-tmp\_logs\2025-11-16T01_13_55_243Z-debug-0.log

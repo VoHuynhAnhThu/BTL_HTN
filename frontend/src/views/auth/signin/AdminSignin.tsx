@@ -14,7 +14,7 @@ export default function AdminSignin() {
     const { pushSuccess, pushError } = useUtility();
 
     const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
-    const [signinPayload, setSigninPayload] = useState<LoginPayload>({ username: "", password: "" });
+    const [signinPayload, setSigninPayload] = useState<{ username: string; password: string }>({ username: "", password: "" });
 
     const submit = async () => {
         if (!signinPayload.username || !signinPayload.password) {
@@ -23,9 +23,11 @@ export default function AdminSignin() {
         }
 
         const auth = new AuthService();
-        const res = await auth.login(signinPayload);
+        const res = await auth.login({ email: signinPayload.username, password: signinPayload.password } as any);
         if (!res.success) {
-            pushError({ title: "Error", message: res.message });
+            // Đảm bảo không truyền object thô vào UI: chỉ chuỗi
+            const msg = typeof res.message === 'object' ? JSON.stringify(res.message) : res.message;
+            pushError({ title: "Error", message: msg || "Sign in failed" });
             return;
         }
         pushSuccess({ title: "Sign in successful!" });
@@ -41,7 +43,7 @@ export default function AdminSignin() {
             <Center className="py-4 gap-4">
                 <BigLogo />
 
-                <Heading className="text-2xl">Welcome back admin!</Heading>
+                <Heading className="text-2xl">Welcome back Admin!</Heading>
 
                 <VStack className="w-10/12 gap-4 py-4">
                     <FormControl>

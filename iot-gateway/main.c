@@ -24,8 +24,8 @@ AdafruitIO_WiFi io(IO_USERNAME, IO_KEY, WIFI_SSID, WIFI_PASS);  // Gọi hàm k�
 // set up the 'button1' feed 
 AdafruitIO_Feed *button1 = io.feed("button1"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
 AdafruitIO_Feed *temperature = io.feed("temperature"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
-AdafruitIO_Feed *humidity = io.feed("humidity"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
-AdafruitIO_Feed *soil_moisture = io.feed("soil_moisture"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
+AdafruitIO_Feed *light = io.feed("light"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
+AdafruitIO_Feed *soil_humidity = io.feed("soil_humidity"); // khai báo con trỏ button1 để chứ dữ liệu lấy từ feed của server.
 #define TXD_PIN (GPIO_NUM_17)
 #define RXD_PIN (GPIO_NUM_16)
  
@@ -142,10 +142,10 @@ void loop() {
     Serial.print("Sent: ");
     Serial.println(value);
         // Gửi giá trị lên feed
-    humidity->save(value1); // Gửi giá trị lên feed
+    light->save(value1); // Gửi giá trị lên feed
     Serial.print("Sent: ");
     Serial.println(value1);
-    soil_moisture->save(value2); // Gửi giá trị lên feed
+    soil_humidity->save(value2); // Gửi giá trị lên feed
     Serial.print("Sent: ");
     Serial.println(value2);
 }

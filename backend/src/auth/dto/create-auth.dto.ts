@@ -24,8 +24,12 @@ export class CreateAuthDto {
 
 
 export class VerifyAuthDto {
-    @IsNotEmpty({message: 'User id is required'})
-    _id: string;
+    @IsOptional()
+    _id?: string;
+
+    @IsOptional()
+    @IsEmail({}, {message: 'Email is invalid'})
+    email?: string;
 
     @IsNotEmpty({message: 'Code is required'})
     codeId: string;

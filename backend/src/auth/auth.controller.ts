@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto, VerifyAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -58,16 +58,22 @@ export class AuthController {
 
   @Public()
   @Post('verify')
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Verifies the user by checking the provided user ID and code ID.
- * 
- * @param verifyDto - Data transfer object containing the user ID and code ID.
- * @returns A promise that resolves to the verification result.
- */
-
-/*******  61e6544d-eb2e-48cf-aa9a-ecf048f6f445  *******/
+  @ResponseMessage("Verify account successfully")
   async verify(@Body() verifyDto: VerifyAuthDto) {
-    return await this.authService.verify(verifyDto._id, verifyDto.codeId);
+    // Support both email and _id
+    if (verifyDto.email) {
+      return await this.authService.verify(verifyDto.email, verifyDto.codeId, true);
+    } else if (verifyDto._id) {
+      return await this.authService.verify(verifyDto._id, verifyDto.codeId, false);
+    } else {
+      throw new UnauthorizedException('Either email or _id is required');
+    }
+  }
+
+  // DEV ONLY: password reset without old password
+  @Post('reset-temp')
+  @Public()
+  async devReset(@Body() body: { email: string, newPassword: string }) {
+    return await this.authService.devResetPassword(body.email, body.newPassword);
   }
 }

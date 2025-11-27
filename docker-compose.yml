@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: smartdrip-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  ai:
+    build:
+      context: .
+      dockerfile: PLANT_AI/Dockerfile
+    container_name: smartdrip-ai
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  backend:
+    build:
+      context: backend
+    container_name: smartdrip-backend
+    restart: unless-stopped
+    env_file:
+      - backend/.env
+    environment:
+      - PORT=8080
+      - AI_SERVICE_URL=http://ai:8001
+      - MONGODB_URI=mongodb://mongo:27017/smartdrip
+    depends_on:
+      - mongo
+      - ai
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo_data:

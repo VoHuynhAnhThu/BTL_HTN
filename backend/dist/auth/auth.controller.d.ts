@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAuthDto, VerifyAuthDto } from './dto/create-auth.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 export declare class AuthController {
     private readonly authService;
@@ -18,4 +18,13 @@ export declare class AuthController {
     }>;
     testMail(): string;
     getProfile(req: any): any;
+    verify(verifyDto: VerifyAuthDto): Promise<any>;
+    devReset(body: {
+        email: string;
+        newPassword: string;
+    }): Promise<{
+        _id: any;
+        email: any;
+        isActive: any;
+    }>;
 }

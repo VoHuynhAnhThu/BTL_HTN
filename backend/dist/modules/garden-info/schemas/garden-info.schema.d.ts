@@ -8,11 +8,11 @@ export declare class GardenInfo {
     cropStart: Date;
     userId: string;
 }
-export declare const GardenInfoSchema: import("mongoose").Schema<GardenInfo, import("mongoose").Model<GardenInfo, any, any, any, import("mongoose").Document<unknown, any, GardenInfo> & GardenInfo & {
+export declare const GardenInfoSchema: import("mongoose").Schema<GardenInfo, import("mongoose").Model<GardenInfo, any, any, any, import("mongoose").Document<unknown, any, GardenInfo, any, {}> & GardenInfo & {
     _id: import("mongoose").Types.ObjectId;
 } & {
     __v: number;
-}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, GardenInfo, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<GardenInfo>> & import("mongoose").FlatRecord<GardenInfo> & {
+}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, GardenInfo, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<GardenInfo>, {}, import("mongoose").ResolveSchemaOptions<import("mongoose").DefaultSchemaOptions>> & import("mongoose").FlatRecord<GardenInfo> & {
     _id: import("mongoose").Types.ObjectId;
 } & {
     __v: number;

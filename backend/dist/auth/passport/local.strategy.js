@@ -16,11 +16,15 @@ const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("../auth.service");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
     constructor(authService) {
-        super();
+        super({ usernameField: 'email', passReqToCallback: true });
         this.authService = authService;
     }
-    async validate(username, password) {
-        const user = await this.authService.validateUser(username, password);
+    async validate(req, email, password) {
+        const effectiveEmail = email || req.body.username;
+        if (!effectiveEmail) {
+            throw new common_1.UnauthorizedException("Missing email/username");
+        }
+        const user = await this.authService.validateUser(effectiveEmail, password);
         if (!user) {
             throw new common_1.UnauthorizedException("Invalid credentials");
         }
