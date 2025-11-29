@@ -25,10 +25,7 @@ const pump_records_module_1 = require("./modules/pump-records/pump-records.modul
 const temperature_records_module_1 = require("./modules/temperature-records/temperature-records.module");
 const mqtt_module_1 = require("./modules/mqtt/mqtt.module");
 const notifications_module_1 = require("./modules/notifications/notifications.module");
-const health_controller_1 = require("./health.controller");
-const ai_module_1 = require("./modules/ai/ai.module");
 const core_1 = require("@nestjs/core");
-const coreiot_module_1 = require("./modules/coreiot/coreiot.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -48,7 +45,6 @@ exports.AppModule = AppModule = __decorate([
             notifications_module_1.NotificationsModule,
             mqtt_module_1.MqttModule,
             light_records_module_1.LightRecordsModule,
-            coreiot_module_1.CoreIotModule,
             users_module_1.UsersModule,
             humidity_records_module_1.HumidityRecordsModule,
             pump_records_module_1.PumpRecordsModule,
@@ -79,9 +75,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             auth_module_1.AuthModule,
             garden_info_module_1.GardenInfoModule,
-            ai_module_1.AiModule
         ],
-        controllers: [app_controller_1.AppController, health_controller_1.HealthController],
+        controllers: [app_controller_1.AppController,],
         providers: [
             app_service_1.AppService,
             { provide: core_1.APP_GUARD, useClass: jwt_auth_guard_1.JwtAuthGuard },

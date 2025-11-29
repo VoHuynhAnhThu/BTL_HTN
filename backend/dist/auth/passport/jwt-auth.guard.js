@@ -13,14 +13,14 @@ exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const passport_1 = require("@nestjs/passport");
-const public_decorator_1 = require("../../public.decorator");
+const customize_1 = require("../../decorator/customize");
 let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
     constructor(reflector) {
         super();
         this.reflector = reflector;
     }
     canActivate(context) {
-        const isPublic = this.reflector.getAllAndOverride(public_decorator_1.IS_PUBLIC_KEY, [
+        const isPublic = this.reflector.getAllAndOverride(customize_1.IS_PUBLIC_KEY, [
             context.getHandler(),
             context.getClass(),
         ]);

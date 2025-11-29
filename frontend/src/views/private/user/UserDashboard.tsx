@@ -17,9 +17,9 @@ import { useRouter } from "expo-router";
 interopIcons([CloudSun, Sun, Moon, Thermometer, Droplet, Leaf, Plus, PenLine]);
 
 type DataType = {
-    temperature: number,
-    light: number,
-    humidity: number,
+    temperature: number | null,
+    light: number | null,
+    humidity: number | null,
     isOn: boolean,
 }
 
@@ -27,32 +27,60 @@ export default function UserDashboard() {
     const router = useRouter();
     const { pushError, pushSuccess, pushAlertDialog } = useUtility();
 
+    const COREIOT_BASE_URL = "https://app.coreiot.io";
+    const JWT_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkdXkubmd1eWVuaGFvQGhjbXV0LmVkdS52biIsInVzZXJJZCI6IjVjYjNhZjMwLTIwNDQtMTFmMC1hNjg5LWQ1NDRhOTUwNGMyNyIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwic2Vzc2lvbklkIjoiMTdhMTcxN2EtMmRkYS00N2ZlLTg2MWItMTY2MmZkOWRhYzFjIiwiZXhwIjoxNzY0NDA0OTExLCJpc3MiOiJjb3JlaW90LmlvIiwiaWF0IjoxNzY0Mzk1OTExLCJmaXJzdE5hbWUiOiJEVVkiLCJsYXN0TmFtZSI6Ik5HVVnhu4ROIEjhuqBPIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjVjYTkwMGQwLTIwNDQtMTFmMC1hNjg5LWQ1NDRhOTUwNGMyNyIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.dQKblpy-SGz7Qf1SRXEsBUcPVlMN_60GHWQz5v3NXPo2vc1RrBb267FWJeqBAxFjsKd4CPsFkk6eWPLWv3gxaw";
+    const DEVICE_ID = "a26d5e00-a518-11f0-b5f4-25fce636d3ff";
+
     const [counterRefresh, setCounterRefresh] = useState(0);
     const [isOpenAddModal, setIsOpenAddModal] = useState(false);
-    const [bla, setDate] = useState<DataType>({
-        temperature: 0,
-        light: 0,
-        humidity: 0,
+    const [telemetry, setTelemetry] = useState<DataType>({
+        temperature: null,
+        light: null,
+        humidity: null,
         isOn: false,
-    })
+    });
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchTelemetry = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/data/`+ getFromStorage("userId")); // Replace with your API endpoint
+                const url = `${COREIOT_BASE_URL}/api/plugins/telemetry/DEVICE/${DEVICE_ID}/values/timeseries`;
+                const params = {
+                    keys: "temperature,humidity,light,isOn",
+                    limit: 1,
+                };
+                const headers = {
+                    "X-Authorization": `Bearer ${JWT_TOKEN}`,
+                };
+                const res = await axios.get(url, { params, headers });
                 const data = res.data;
-                setDate(data);
-            } catch (error) {
-                // console.error("Error fetching data:", error);
+
+                function readFloat(key: string) {
+                    const arr = data[key] || [];
+                    if (!arr.length) return null;
+                    return parseFloat(arr[0].value);
+                }
+                function readBool(key: string) {
+                    const arr = data[key] || [];
+                    if (!arr.length) return false;
+                    return arr[0].value === "true" || arr[0].value === true || arr[0].value === 1 || arr[0].value === "1";
+                }
+
+                setTelemetry({
+                    temperature: readFloat("temperature"),
+                    humidity: readFloat("humidity"),
+                    light: readFloat("light"),
+                    isOn: readBool("isOn"),
+                });
+            } catch (e) {
+                // Xử lý lỗi nếu cần
             }
         };
 
-        const interval = setInterval(() => {
-            fetchData();
-        }, 1000);
+        fetchTelemetry();
+        const interval = setInterval(fetchTelemetry, 5000); // 5 giây
 
-        return () => clearInterval(interval); // Cleanup interval on unmount
-    }, [])
+        return () => clearInterval(interval);
+    }, []);
 
     const onCloseAddModal = () => {
         setIsOpenAddModal(false);
@@ -102,23 +130,6 @@ export default function UserDashboard() {
         })
     }
 
-    const [apiData, setAPIData] = useState<any>({
-        light: 1,
-        humidity: 1,
-        temperature: 1,
-    });
-
-    const data = {
-        farmName: "Smart drip farm",
-        temperature: apiData.temperature,
-        // light: 123,
-        thermometer: 32,
-        light: apiData.light,
-        humidity: apiData.humidity,
-        sunrise: "06:30 AM",
-        sunset: "07:30 PM",
-    }
-
     return (
         <Fragment>
             <PopupAddPlant isOpen={isOpenAddModal} onClose={onCloseAddModal} refresh={refresh} />
@@ -136,16 +147,18 @@ export default function UserDashboard() {
                         <VStack className="w-full h-fit gap-4">
                             <HStack className="items-end gap-2">
                                 <CloudSun size={40} className="text-primary-500" />
-                                <Heading className="text-2xl text-black font-medium">{`${bla.temperature} \u00b0 `}</Heading>
-                                <Text className="text-xl ml-auto text-black font-medium">{data.farmName}</Text>
+                                <Heading className="text-2xl text-black font-medium">
+                                    {telemetry.temperature !== null ? `${telemetry.temperature.toFixed(2)} \u00b0` : "--"}
+                                </Heading>
+                                <Text className="text-xl ml-auto text-black font-medium">Smart drip farm</Text>
                             </HStack>
                             <HStack className="gap-4">
                                 <ShadowBox className="h-fit">
                                     <HStack className="flex-1 justify-start items-center p-4 gap-4">
-                                    <Droplet className="text-primary-500" />
+                                        <Droplet className="text-primary-500" />
                                         <VStack>
                                             <Text className="font-semibold text-2xs">Pump</Text>
-                                            <Text>{bla.isOn ? "On" : "Off"}</Text>
+                                            <Text>{telemetry.isOn ? "On" : "Off"}</Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
@@ -154,18 +167,22 @@ export default function UserDashboard() {
                                         <Thermometer className="text-primary-500" />
                                         <VStack>
                                             <Text className="font-semibold text-2xs">Thermometer</Text>
-                                            <Text>{`${bla.temperature} \u00b0`}</Text>
+                                            <Text>
+                                                {telemetry.temperature !== null ? `${telemetry.temperature.toFixed(2)} \u00b0` : "--"}
+                                            </Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
                             </HStack>
                             <HStack className="gap-4">
-                            <ShadowBox className="h-fit">
+                                <ShadowBox className="h-fit">
                                     <HStack className="flex-1 justify-start items-center p-4 gap-4">
                                         <Sun className="text-primary-500" />
                                         <VStack>
                                             <Text className="font-semibold text-2xs">Light</Text>
-                                            <Text>{`${bla.light}`}</Text>
+                                            <Text>
+                                                {telemetry.light !== null ? `${telemetry.light.toFixed(2)}` : "--"}
+                                            </Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
@@ -174,26 +191,13 @@ export default function UserDashboard() {
                                         <Droplet className="text-primary-500" />
                                         <VStack>
                                             <Text className="font-semibold text-2xs">Humidity</Text>
-                                            <Text>{`${bla.humidity} \%`}</Text>
+                                            <Text>
+                                                {telemetry.humidity !== null ? `${telemetry.humidity.toFixed(2)} %` : "--"}
+                                            </Text>
                                         </VStack>
                                     </HStack>
                                 </ShadowBox>
                             </HStack>
-                                {/* <ShadowBox className="h-fit">
-                                    <HStack className="flex-1 items-center p-4 gap-2">
-                                        <Sun className="text-primary-500" />
-                                        <VStack>
-                                            <Text className="font-semibold text-2xs">Sunrise</Text>
-                                            <Text>{data.sunrise}</Text>
-                                        </VStack>
-
-                                        <VStack className="items-end ml-auto">
-                                            <Text className="font-semibold text-2xs">Sunset</Text>
-                                            <Text>{data.sunset}</Text>
-                                        </VStack>
-                                        <Moon className="text-primary-500" />
-                                    </HStack>
-                                </ShadowBox> */}
                         </VStack>
                     </Box>
                     {/* AI Scan Button - Full Width */}

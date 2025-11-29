@@ -11,14 +11,15 @@ import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { TransformInterceptor } from './core/transorm.interceptor';
 import { GardenInfoModule } from './modules/garden-info/garden-info.module';
 import { HumidityRecordsModule } from './modules/humidity-records/humidity-records.module';
-import { LightRecordsModule } from './modules/light-records/light-records.module';import { PumpRecordsModule } from './modules/pump-records/pump-records.module';
+import { LightRecordsModule } from './modules/light-records/light-records.module';
+import { PumpRecordsModule } from './modules/pump-records/pump-records.module';
 import { TemperatureRecordsModule } from './modules/temperature-records/temperature-records.module';
 import { MqttModule } from './modules/mqtt/mqtt.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-import { HealthController } from './health.controller';
-import { AiModule } from './modules/ai/ai.module';
+// import { HealthController } from './health.controller';
+// import { AiModule } from './modules/ai/ai.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { CoreIotModule } from './modules/coreiot/coreiot.module';
+// import { CoreIotModule } from './modules/coreiot/coreiot.module';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { CoreIotModule } from './modules/coreiot/coreiot.module';
     NotificationsModule,
     MqttModule,
     LightRecordsModule,
-    CoreIotModule,
+    // CoreIotModule,
     UsersModule,
     HumidityRecordsModule,
     PumpRecordsModule,
@@ -64,9 +65,9 @@ import { CoreIotModule } from './modules/coreiot/coreiot.module';
     }),
     AuthModule,
     GardenInfoModule,
-    AiModule
+    // AiModule
   ],
-  controllers: [AppController, HealthController],
+  controllers: [AppController, /*HealthController*/],
   providers: [
     AppService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
